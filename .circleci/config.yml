@@ -10,9 +10,10 @@ jobs:
     steps:
       - checkout
       - node/install-packages:
-        pkg-manager: npm
+          pkg-manager: npm
       - run: |
-          echo "Installing dependencies..."
+          echo "Installing dependencies...."
           npm install
-    test:
-    optional_publish:
+
+test:
+optional_publish:
