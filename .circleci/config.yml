@@ -30,7 +30,7 @@ jobs:
   publish:
     executor: docker/docker
     steps:
-      - setup_remote/docker
+      - setup_remote_docker
       - checkout
       - docker/check
       - docker/build:
