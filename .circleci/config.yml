@@ -39,19 +39,36 @@ jobs:
       - docker/push:
           image: meowdaline/education-space
           tag: v1.0.1
-  deploy:
+  # deploy:
+  #   docker:
+  #     - image: cimg/node:16.10
+  #   steps:
+  #     - setup_remote_docker
+  #     - checkout
+  #     - heroku/install
+  #     - run:
+  #         name: Heroku Container Push
+  #         command: |
+  #           heroku container:login
+  #           heroku container:push web -a maddy-su-devops
+  #           heroku container:release web -a maddy-su-devops
+  pull-and-deploy:
     docker:
       - image: cimg/node:16.10
     steps:
       - setup_remote_docker
-      - checkout
       - heroku/install
-      - run:
-          name: Heroku Container Push
-          command: |
-            heroku container:login
-            heroku container:push web -a maddy-su-devops
-            heroku container:release web -a maddy-su-devops
+      - docker/pull:
+          images: meowdaline/education-space:v1.0.1
+      - run: 
+          name: Heroku Container Push With Image from Docker Hub
+              command: |
+                heroku container:login
+                docker tag meowdaline/education-space:v1.0.1 registry.heroku.com/maddy-su-devops.web
+                # format --- docker tag <image name from docker hub> registry.heroku.com/<app-name>/web
+                docker push registry.heroku.com/maddy-su-devops/web
+                # format --- docker push registry.heroku.com/<app-name>/web
+                heroku container:release web -a maddy-su-devops
 
 workflows:
   simple_workflow:
@@ -63,6 +80,6 @@ workflows:
       - publish:
           requires:
             - test
-      - deploy:
+      - pull-and-deploy:
           requires:
-            - test
+            - publish
