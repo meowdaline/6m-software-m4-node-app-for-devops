@@ -2,6 +2,7 @@ version: 2.1
 
 orbs:
   node: circleci/node@5.0.1
+  docker: circleci/docker@2.1.4
   heroku: circleci/heroku@2.0.0
 
 jobs:
@@ -26,8 +27,16 @@ jobs:
       - run: |
           echo "Running tests..."
           npm test
-  optional_publish:
-    # Assignment
+  publish:
+    executor: docker/docker
+    steps:
+      - setup_remote/docker
+      - checkout
+      - docker/check
+      - docker/build:
+          image: meowdaline/education-space
+      - docker/push:
+          image: meowdaline/education-space
   deploy:
     docker:
       - image: cimg/node:16.10
@@ -49,6 +58,9 @@ workflows:
       - test:
           requires:
             - build
+      - publish:
+          requires:
+            - test
       - deploy:
           requires:
             - test
