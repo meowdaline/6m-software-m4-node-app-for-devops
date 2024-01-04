@@ -60,15 +60,15 @@ jobs:
       - heroku/install
       - docker/pull:
           images: meowdaline/education-space:v1.0.1
-      - run: 
+      - run:
           name: Heroku Container Push With Image from Docker Hub
-              command: |
-                heroku container:login
-                docker tag meowdaline/education-space:v1.0.1 registry.heroku.com/maddy-su-devops.web
-                # format --- docker tag <image name from docker hub> registry.heroku.com/<app-name>/web
-                docker push registry.heroku.com/maddy-su-devops/web
-                # format --- docker push registry.heroku.com/<app-name>/web
-                heroku container:release web -a maddy-su-devops
+          command: |
+            heroku container:login
+            docker tag meowdaline/education-space:v1.0.1 registry.heroku.com/maddy-su-devops.web
+            # format --- docker tag <image name from docker hub> registry.heroku.com/<app-name>/web
+            docker push registry.heroku.com/maddy-su-devops/web
+            # format --- docker push registry.heroku.com/<app-name>/web
+            heroku container:release web -a maddy-su-devops
 
 workflows:
   simple_workflow:
